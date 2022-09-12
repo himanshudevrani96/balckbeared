@@ -1,0 +1,10 @@
+export const GET_BALANCE = 'GET_BALANCE';
+
+export const LOGIN = 'LOGIN';
+
+export const WALLET_BALANCE = 'WALLET_BALANCE';
+
+export const TOKEN_BALANCE = 'TOKEN_BALANCE';
+export const CHECK_WALLET_CONNECT = 'CHECK_WALLET_CONNECT';
+
+export const WALLET_CONNECT_CHECK = 'WALLET_CONNECT_CHECK';
