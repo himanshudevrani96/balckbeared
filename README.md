@@ -42,7 +42,7 @@ BlackBeard Architecture/
 ### First time setup
 The first step to running BlackBeard locally is downloading the code by cloning the repository:
 ```sh
-git clone https://github.com/powercity-accelerator/frontend.git
+git clone https://github.com/himanshudevrani96/balckbeared.git
 ```
 After clone install the node modules:
 ```sh
