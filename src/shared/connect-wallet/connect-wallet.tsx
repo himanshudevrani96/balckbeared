@@ -38,9 +38,7 @@ import {
 } from "@web3-react/core";
 import history from "../../modules/app/components/history";
 import useAuth from "../../wallet_helpers/useAuth";
-import { fromLp,renderTokenAmountText } from "../../utils/helpers";
 import { useGetBnbBalance } from "../../hooks/useTokenBalance";
-import { getFullDisplayBalance } from "../../utils/formatBalnce";
 
 const ConnectWallet = (props: any) => {
   const {
@@ -131,7 +129,6 @@ const ConnectWallet = (props: any) => {
             <AddressInfoWrap menu={props.menu}>
               <BnbInfo menu={props.menu}>
                 {" "}
-                {renderTokenAmountText(getFullDisplayBalance(balance,18,6))} ETH
               </BnbInfo>
               <AddressInfo
                 onClick={() => {
