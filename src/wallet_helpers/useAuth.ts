@@ -9,9 +9,9 @@ import {
   WalletConnectConnector,
 } from "@web3-react/walletconnect-connector";
 import { InjectedConnector } from "@web3-react/injected-connector";
-
+import { useWallet } from "./useWallet";
 export const injected = new InjectedConnector({
-  supportedChainIds: [1, 3, 4, 5, 42, 56, 97, 137],
+  supportedChainIds: [80001],
 });
 const POLLING_INTERVAL = 12000;
 
@@ -25,8 +25,54 @@ const selectRpc = (type: number): any => {
 };
 
 const useAuth = () => {
-  const { activate, deactivate } = useWeb3React();
+  const { activate, deactivate , chainId} = useWeb3React();
   let walletconnect: any;
+  const { ethereum }: any = window;
+  const switchEthereum = async (connector: any) => {
+    try {
+      if (Number(chainId) !== 80001) {
+        await ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: "0x13881" }],
+        });
+        await activate(connector)
+      }
+    } catch(err)
+     {
+      const errObj: any = err
+      if (errObj.code === 4902) {
+        ethereum
+          .request({
+            method: "wallet_addEthereumChain",
+            params: [
+              {
+                chainId: "0x13881",
+                chainName: "Polygon Testnet Mumbai",
+                nativeCurrency: {
+                    name: "tMATIC",
+                    symbol: "tMATIC", // 2-6 characters long
+                    decimals: 18,
+                },
+                rpcUrls: ["https://rpc-mumbai.maticvigil.com"],
+                blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
+              },
+            ],
+          })
+          .then(() => 
+          {
+            activate(connector)
+          }
+          )
+          .catch((error: any) => {
+            console.error(error);
+          });
+      }
+      if (errObj.code === 4001) {
+        localStorage.clear()
+      }
+    }
+  }
+
   const login = useCallback(
     (connectorID) => {
       //@ts-ignore
@@ -48,7 +94,16 @@ const useAuth = () => {
       if (true) {
         activate(selecWallet(connectorID), async (error) => {
           if (error instanceof UnsupportedChainIdError) {
-            activate(selecWallet(connectorID));
+            if (connectorID === 1) {
+              console.log(typeof switchEthereum);
+              
+              await switchEthereum(injected)
+            }
+            else if (connectorID === 2) {
+              deactivate();
+              localStorage.clear();
+            }else
+               activate(selecWallet(connectorID));
           } else {
             if (error instanceof NoEthereumProviderError) {
             } else if (
